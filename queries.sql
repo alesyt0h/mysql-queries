@@ -169,7 +169,7 @@ WHERE nif = '26902806M';
 
 SELECT DISTINCT departamento.nombre FROM universidad.grado
 INNER JOIN asignatura ON asignatura.id_grado = grado.id 
-LEFT JOIN profesor ON profesor.id_profesor = asignatura.id_profesor
+LEFT JOIN profesor USING(id_profesor)
 LEFT JOIN departamento ON departamento.id = profesor.id_departamento
 WHERE NOT asignatura.id_profesor IS NULL;
 
@@ -220,7 +220,7 @@ SELECT * FROM asignatura WHERE id_profesor IS NULL;
 
 SELECT DISTINCT departamento.* FROM departamento
 LEFT JOIN profesor ON profesor.id_departamento = departamento.id
-LEFT JOIN asignatura ON asignatura.id_profesor = profesor.id_profesor
+LEFT JOIN asignatura USING (id_profesor)
 LEFT JOIN curso_escolar ON curso_escolar.id = asignatura.curso
 WHERE asignatura.nombre IS NULL AND asignatura.curso IS NULL;
 
@@ -258,8 +258,8 @@ GROUP BY anyo_inicio;
 
 SELECT persona.id, persona.nombre, persona.apellido1, persona.apellido2, COUNT(asignatura.id_profesor) as numero_de_asignaturas FROM persona
 LEFT JOIN profesor ON profesor.id_profesor = persona.id
-LEFT JOIN asignatura ON profesor.id_profesor = asignatura.id_profesor
-WHERE persona.tipo = 'profesor' GROUP BY profesor.id_profesor ORDER BY numero_de_asignaturas DESC;
+LEFT JOIN asignatura USING (id_profesor)
+WHERE persona.tipo = 'profesor' GROUP BY persona.id ORDER BY numero_de_asignaturas DESC;
 
 -- Primera forma de hacerlo
 SELECT * FROM persona ORDER BY fecha_nacimiento DESC LIMIT 1;
